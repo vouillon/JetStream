@@ -1,0 +1,4 @@
+(executable
+ (name camlboy_bench)
+ (modes byte exe)
+ (libraries camlboy_lib))

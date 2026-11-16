@@ -590,6 +590,33 @@
                     A similar version of this benchmark was previously published in Octane version 2.
                     Source code: <a href="workloads/Octane/navier-stokes.js">navier-stokes.js</a>
                 </dd>
+                <dt id="ocaml-apps-wasm" class="non-default">ocaml-apps-wasm</dt>
+                <dd>
+                    Four OCaml programs compiled to WasmGC with <a
+                        href="https://ocsigen.org/js_of_ocaml/latest/manual/wasm_overview">wasm_of_ocaml</a>:
+                    the <a href="https://github.com/linoscope/CAMLBOY">CAMLBOY</a> Game Boy emulator running the
+                    homebrew game <a href="https://tangramgames.dk/tobutobugirl/">Tobu Tobu Girl</a> (integer and
+                    bit manipulation, memory accesses through OCaml bigarrays); the
+                    <a href="https://github.com/herd/herdtools7">herd7</a> memory model simulator, checking litmus
+                    tests against the AArch64 memory model (evaluation of the model's relations over candidate
+                    executions, sets and maps, constraint solving); the
+                    <a href="https://github.com/Gbury/mSAT">msat</a> SAT solver, solving DIMACS problems (clause
+                    propagation and conflict analysis over mutable arrays); and the
+                    <a href="https://github.com/Kappa-Dev/KappaTools">KaSim</a> stochastic simulator of rule-based
+                    models, simulating a model of EGF receptor signalling (random event sampling over a site
+                    graph, floating-point rate computations).
+                    Source code: In the <a href="wasm/ocaml/">wasm/ocaml/</a> directory.
+                </dd>
+                <dt id="ocaml-tools-wasm" class="non-default">ocaml-tools-wasm</dt>
+                <dd>
+                    Two OCaml developer tools compiled to WasmGC with <a
+                        href="https://ocsigen.org/js_of_ocaml/latest/manual/wasm_overview">wasm_of_ocaml</a>:
+                    the <a href="https://github.com/ocsigen/js_of_ocaml">js_of_ocaml</a> compiler translating an OCaml
+                    bytecode library to JavaScript, and <a href="https://github.com/ocaml-ppx/ocamlformat">ocamlformat</a>
+                    formatting one of its own source files. Both spend their time parsing, transforming trees,
+                    using maps and hash tables, and pretty-printing, and allocate heavily.
+                    Source code: In the <a href="wasm/ocaml/">wasm/ocaml/</a> directory.
+                </dd>
                 <dt id="octane-code-load">octane-code-load</dt>
                 <dd>
                     Test of code load speed of the jQuery and Closure libraries. Because this test allows

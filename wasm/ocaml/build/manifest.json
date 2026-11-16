@@ -1,0 +1,116 @@
+{
+  "camlboy": {
+    "loader": "camlboyLoader",
+    "wasm": "camlboyWasm",
+    "files": {
+      "tobu.gb": "camlboyRom"
+    },
+    "argv": [
+      "--frames",
+      "200",
+      "tobu.gb"
+    ],
+    "output": "<stdout>",
+    "expected": "19:22d5de53"
+  },
+  "herd": {
+    "loader": "herdLoader",
+    "wasm": "herdWasm",
+    "files": {},
+    "bundle": "herdInputs",
+    "argv": [
+      "-set-libdir",
+      "lib",
+      "tests/2+2W+dmb.sys.litmus",
+      "tests/LB+dmb.sy+po.litmus",
+      "tests/LB+rel+BEQ3.litmus",
+      "tests/MP.litmus",
+      "tests/R.litmus",
+      "tests/S.litmus",
+      "tests/SB.litmus",
+      "tests/MP+CAS-rfi-ctrl+acq.litmus",
+      "tests/R+CAS-rfi-ctrl+DMBST.litmus",
+      "tests/MP+rel+CAS-ok-MRs-addr.litmus",
+      "tests/STABLE.litmus",
+      "tests/MP+rel+addr-po-loc-addr.litmus",
+      "tests/MP+rel+rmw-lrs-acq.litmus"
+    ],
+    "output": "<stdout>",
+    "ignore": [
+      "Time "
+    ],
+    "expected": "3235:6dc7c73e"
+  },
+  "msat": {
+    "loader": "msatLoader",
+    "wasm": "msatWasm",
+    "files": {
+      "msat-0.cnf": "msatInput0",
+      "msat-1.cnf": "msatInput1"
+    },
+    "argv": [
+      "msat-0.cnf",
+      "msat-1.cnf"
+    ],
+    "output": "<stdout>",
+    "expected": "34:79023101"
+  },
+  "kasim": {
+    "loader": "kasimLoader",
+    "wasm": "kasimWasm",
+    "files": {
+      "sos.ka": "kasimModel"
+    },
+    "argv": [
+      "sos.ka",
+      "-var",
+      "scale",
+      "10",
+      "-seed",
+      "42",
+      "-u",
+      "event",
+      "-l",
+      "25000",
+      "-p",
+      "250",
+      "-mode",
+      "batch",
+      "--no-log",
+      "-o",
+      "data.csv"
+    ],
+    "output": "data.csv",
+    "ignore": [
+      "#"
+    ],
+    "expected": "1838:d42aefaf"
+  },
+  "ocamlformat": {
+    "loader": "ocamlformatLoader",
+    "wasm": "ocamlformatWasm",
+    "files": {
+      "input.ml": "ocamlformatInput"
+    },
+    "argv": [
+      "input.ml"
+    ],
+    "output": "input.ml.out",
+    "expected": "20537:c2355e31"
+  },
+  "js_of_ocaml": {
+    "loader": "jsoLoader",
+    "wasm": "jsoWasm",
+    "files": {
+      "input.cma": "jsoInput"
+    },
+    "argv": [
+      "compile",
+      "input.cma",
+      "-o",
+      "out.js"
+    ],
+    "output": "out.js",
+    "expected": "94585:733797d3"
+  }
+}

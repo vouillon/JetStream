@@ -1,0 +1,132 @@
+Built on 2026-11-17 13:24:10+01:00
+opam-repository: 49c3ff00c7cf462380b7c42e8de0412e2a2372d3
+https://github.com/ocsigen/js_of_ocaml.git: be44d3863fc248ca79d975bb85507e15588b7233 Mon Nov 16 15:48:52 2026 +0100 wasm: fix invalid code for numbers used as other values on dead paths
+OCaml: 5.4.0
+wasm_of_ocaml: 6.5.0
+Binaryen: wasm-opt version 120
+Installed opam packages:
+# Packages matching: installed
+# Name                  # Version
+astring                 0.8.5
+base                    v0.17.3
+base-bigarray           base
+base-bytes              base
+base-domains            base
+base-effects            base
+base-nnp                base
+base-threads            base
+base-unix               base
+bigstringaf             0.10.0
+camlp-streams           5.0.1
+cmdliner                2.1.1
+conf-binaryen           1
+conf-gmp                5
+conf-pkg-config         5
+cppo                    1.8.0
+csexp                   1.5.2
+dune                    3.25.0
+dune-build-info         3.25.0
+dune-configurator       3.25.0
+either                  1.0.0
+fix                     20250919
+fmt                     0.11.0
+fpath                   0.7.3
+gen                     1.1
+iter                    1.9
+js_of_ocaml             6.5.0
+js_of_ocaml-compiler    6.5.0
+logs                    0.10.0
+lwt                     6.1.2
+menhir                  20260209
+menhirCST               20260209
+menhirGLR               20260209
+menhirLib               20260209
+menhirSdk               20260209
+msat                    0.9.1
+num                     1.6
+ocaml                   5.4.0
+ocaml-base-compiler     5.4.0
+ocaml-compiler          5.4.0
+ocaml-compiler-libs     v0.17.0
+ocaml-config            3
+ocaml-options-vanilla   1
+ocaml-version           4.1.6
+ocaml_intrinsics_kernel v0.17.3
+ocamlbuild              0.16.1
+ocamlfind               1.9.8
+ocamlformat-lib         0.29.0
+ocp-indent              1.10.0
+ocplib-endian           1.2
+ppx_derivers            1.2.1
+ppx_devtools-optcomp    dev
+ppxlib                  0.39.0
+re                      1.14.0
+result                  1.5
+sedlex                  3.8.1
+seq                     base
+sexplib0                v0.17.0
+stdio                   v0.17.0
+stdlib-shims            0.3.0
+topkg                   1.1.1
+uucp                    18.0.0
+uuseg                   18.0.0
+uutf                    1.0.4
+wasm_of_ocaml-compiler  6.5.0
+wax-lib                 0.3.0
+yojson                  3.0.0
+zarith                  1.14
+https://github.com/linoscope/CAMLBOY.git: 11ae10a1e1ea318a64e6c13018c96be5aaaf23bb Wed Jan 7 20:50:39 2026 +0900 Merge pull request #18 from toots/mbc2
+https://github.com/herd/herdtools7.git: 11612159505d3b7926473da07a75655ca76c447a Mon Nov 16 17:10:12 2026 +0100 Merge pull request #2102 from herd/fix-speedcheck-all-types
+https://github.com/ocaml-wasm/zarith_stubs_js.git: 64e8cd81386aeceeaed34dfbd826265a5b5a97ca Thu Sep 10 14:14:58 2026 +0200 Remove unused import and local variables
+https://github.com/Kappa-Dev/KappaTools.git: 7f8fd869c4f83ea113dc614b1e052bda73c69ae2 Fri Apr 17 15:22:05 2026 +0200 Wrong Makefile
+msat-bin: 0.9.1
+Read 42 sample input sentences and 6 error messages.
+Warning [missing-primitive]: There are some missing Wasm primitives
+Dummy implementations (raising an exception) will be provided.
+Missing primitives:
+  caml_unix_setitimer
+Warning [integer-overflow]: integer 0x7fffffff (2147483647) truncated to 0xffffffff (-1); the generated code might be incorrect.
+Warning [missing-primitive]: There are some missing Wasm primitives
+Dummy implementations (raising an exception) will be provided.
+Missing primitives:
+  lwt_unix_is_socket
+  caml_unix_pipe
+  caml_unix_set_nonblock
+  caml_unix_clear_nonblock
+  caml_unix_select
+  caml_unix_dup2
+  caml_unix_kill
+  lwt_unix_writable
+  lwt_unix_wait4
+  lwt_unix_start_job
+  lwt_unix_self_result
+  lwt_unix_run_job_sync
+  lwt_unix_reset_after_fork
+  lwt_unix_recv_notifications
+  lwt_unix_readable
+  lwt_unix_lseek_64_job
+  lwt_unix_fill_bytes
+  lwt_unix_close_job
+  lwt_unix_check_job
+  lwt_unix_bytes_write_job
+  lwt_unix_bytes_write
+  lwt_unix_bytes_read_job
+  lwt_unix_bytes_read
+  lwt_process_wait_job
+  lwt_process_terminate_process
+  lwt_process_create_process
+  lwt_libev_writable_init
+  lwt_libev_unloop
+  lwt_libev_timer_stop
+  lwt_libev_timer_init
+  lwt_libev_stop
+  lwt_libev_readable_init
+  lwt_libev_loop
+  lwt_libev_io_stop
+  lwt_libev_init
+  lwt_libev_backend
+  caml_unix_waitpid
+  caml_unix_fork
+  caml_unix_execvpe
+  caml_unix_execvp
+Build success

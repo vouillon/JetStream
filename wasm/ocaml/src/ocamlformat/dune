@@ -1,0 +1,4 @@
+(executable
+ (name ocamlformat_bench)
+ (modes byte exe)
+ (libraries ocamlformat-lib))

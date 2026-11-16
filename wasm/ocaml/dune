@@ -1,0 +1,5 @@
+; Only src/ (the benchmark drivers) and vendor/ (third-party sources fetched
+; by build.sh) are part of this dune project.
+(dirs src vendor)
+
+(vendored_dirs vendor)
