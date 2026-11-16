@@ -34,6 +34,7 @@ const IGNORE_PATTERNS = [
     "**/.*/**",
     "**/build/**",
     "**/dotnet/build-*/**",
+    "**/wasm/ocaml/_*/**",
     // Existing benchmarks with common / non-standard license headers:
     "**/8bitbench/**",
     "**/ARES-6/Basic/test.js",

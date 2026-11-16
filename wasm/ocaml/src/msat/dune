@@ -1,0 +1,4 @@
+(executable
+ (name msat_bench)
+ (modes byte exe)
+ (libraries msat msat.sat))

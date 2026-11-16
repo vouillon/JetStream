@@ -1,0 +1,277 @@
+# Changes to KappaTools for this benchmark:
+# - rename the identifier `effect`, a keyword since OCaml 5.3, to `effect_`;
+# - read results in JSON array form only (yojson 3 no longer has variants);
+# - build KaSim as bytecode as well.
+diff --git a/core/cflow/utilities.ml b/core/cflow/utilities.ml
+index 86c3799..dc2df6c 100644
+--- a/core/cflow/utilities.ml
++++ b/core/cflow/utilities.ml
+@@ -247,7 +247,7 @@ let make_unambiguous parameters ?(shall_we_compute = we_shall)
+   ) else
+     error, profiling_info, trace
+ 
+-let lift_to_care_about_ambiguities f requirement effect parameters
++let lift_to_care_about_ambiguities f requirement effect_ parameters
+     ?(shall_we_compute = we_shall)
+     ?(shall_we_compute_profiling_information = we_shall)
+     ?(print_if_zero = we_shall) kappa_handler profiling_info error trace =
+@@ -275,7 +275,7 @@ let lift_to_care_about_ambiguities f requirement effect parameters
+         parameters ~shall_we_compute ~shall_we_compute_profiling_information
+         ~print_if_zero kappa_handler profiling_info error trace
+     in
+-    let trace = set_ambiguity_level trace (handle_ambiguities effect true) in
++    let trace = set_ambiguity_level trace (handle_ambiguities effect_ true) in
+     error, log_info, trace
+   ) else
+     error, profiling_info, trace
+diff --git a/core/dataStructures/result_util.ml b/core/dataStructures/result_util.ml
+index 7ff96f4..21b7cd6 100644
+--- a/core/dataStructures/result_util.ml
++++ b/core/dataStructures/result_util.ml
+@@ -156,10 +156,8 @@ let read_t read__ok read__error p lb =
+     Yojson.Basic.read_space p lb;
+     out
+   in
+-  match Yojson.Basic.start_any_variant p lb with
+-  | `Edgy_bracket -> aux_read_t Yojson.Basic.read_gt p lb
+-  | `Double_quote -> raise (Yojson.Json_error "Not of result type")
+-  | `Square_bracket -> aux_read_t Yojson.Basic.read_rbr p lb
++  Yojson.Basic.read_lbr p lb;
++  aux_read_t Yojson.Basic.read_rbr p lb
+ 
+ let t_of_string read__ok read__error s =
+   read_t read__ok read__error (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
+diff --git a/core/grammar/cst.ml b/core/grammar/cst.ml
+index b967aab..5f1b937 100644
+--- a/core/grammar/cst.ml
++++ b/core/grammar/cst.ml
+@@ -55,11 +55,11 @@ let append_to_ast_compil (nr_working_set_rules, rev_instr) compil =
+              k )
+          | Ast.PLOT expr ->
+            { r with Ast.observables = expr :: r.Ast.observables }, k
+-         | Ast.PERT ((alarm, pre, effect, opt), pos) ->
++         | Ast.PERT ((alarm, pre, effect_, opt), pos) ->
+            ( {
+                r with
+                Ast.perturbations =
+-                 ((alarm, pre, effect, opt), pos) :: r.Ast.perturbations;
++                 ((alarm, pre, effect_, opt), pos) :: r.Ast.perturbations;
+              },
+              k )
+          | Ast.CONFIG (param_name, value_list) ->
+diff --git a/core/grammar/eval.ml b/core/grammar/eval.ml
+index cc92fa9..130d3d6 100644
+--- a/core/grammar/eval.ml
++++ b/core/grammar/eval.ml
+@@ -470,7 +470,7 @@ let pert_of_result ~debug_mode ~warning ?overwrite_t0 ast_algs ast_rules
+           {
+             Primitives.alarm;
+             Primitives.precondition = pre;
+-            Primitives.effect = effects;
++            Primitives.effect_ = effects;
+             Primitives.repeat;
+             Primitives.needs_backtrack;
+           }
+diff --git a/core/grammar/kappaParser.mly b/core/grammar/kappaParser.mly
+index 5f29f0e..1bee62e 100644
+--- a/core/grammar/kappaParser.mly
++++ b/core/grammar/kappaParser.mly
+@@ -90,10 +90,10 @@ start_rule:
+ 						 ::r.Ast.observables}
+ 		      | Ast.PLOT expr ->
+ 			 {r with Ast.observables = expr::r.Ast.observables}
+-		      | Ast.PERT ((alarm,pre,effect,opt),pos) ->
++		      | Ast.PERT ((alarm,pre,effect_,opt),pos) ->
+ 			 {r with
+ 			  Ast.perturbations =
+-			   ((alarm,pre,effect,opt),pos)::r.Ast.perturbations}
++			   ((alarm,pre,effect_,opt),pos)::r.Ast.perturbations}
+ 		      | Ast.CONFIG (param_name,value_list) ->
+ 			 {r with
+ 			  Ast.configurations = (param_name,value_list)::r.Ast.configurations}
+@@ -174,11 +174,11 @@ standalone_effect_list: effect_list EOF {$1}
+ 
+ effect_list:
+     | OP_PAR effect_list CL_PAR {$2}
+-    | effect {[$1]}
+-    | effect SEMICOLON effect_list {$1::$3}
++    | effect_ {[$1]}
++    | effect_ SEMICOLON effect_list {$1::$3}
+     ;
+ 
+-effect:
++effect_:
+     | ASSIGN ID alg_expr /*updating the rate of a rule*/
+ 						      {Ast.UPDATE (($2,rhs_pos 2),$3)}
+     | ASSIGN LABEL alg_expr /*updating the rate of a rule*/
+diff --git a/core/grammar/kparser4.mly b/core/grammar/kparser4.mly
+index 2ed227b..e1f0596 100644
+--- a/core/grammar/kparser4.mly
++++ b/core/grammar/kparser4.mly
+@@ -646,7 +646,7 @@ print_expr:
+   | annoted nonempty_print_expr { $2 }
+   ;
+ 
+-effect:
++effect_:
+   | ASSIGN annoted ID annoted alg_expr
+     { let (a,pend,p) = $5 in (Ast.UPDATE (($3,rhs_pos 3),a),pend,p) }
+   | ASSIGN annoted LABEL annoted alg_expr
+@@ -753,7 +753,7 @@ expecting 'ID <- alg_expression'")) }
+ ;
+ 
+ effect_or_idin:
+-  | effect {$1}
++  | effect_ {$1}
+   | idin {$1}
+ 
+ partial_effect_list:
+@@ -772,8 +772,8 @@ partial_effect_list_at_least_one_idin:
+ effect_list:
+   | OP_PAR annoted partial_effect_list CL_PAR annoted { $3 }
+   | OP_PAR annoted partial_effect_list CL_PAR annoted SEMICOLON annoted {let (e,_,_) =  $3 in e,end_pos 6,$7 }
+-  | effect SEMICOLON annoted { let (e,_,_) = $1 in ([e],end_pos 2,$3) }
+-  | effect SEMICOLON annoted effect_list
++  | effect_ SEMICOLON annoted { let (e,_,_) = $1 in ([e],end_pos 2,$3) }
++  | effect_ SEMICOLON annoted effect_list
+     { let (e,_,_) = $1 in let (l,pend,a) = $4 in (e::l,pend,a) }
+   ;
+ 
+@@ -873,7 +873,7 @@ model:
+ interactive_command:
+   | annoted RUN annoted SEMICOLON { Ast.RUN (Loc.annot_with_dummy Alg_expr.FALSE) }
+   | annoted RUN annoted bool_expr SEMICOLON { let (pause,_,_) = $4 in Ast.RUN pause }
+-  | annoted effect SEMICOLON { let (eff,_,_) = $2 in Ast.MODIFY [eff] }
++  | annoted effect_ SEMICOLON { let (eff,_,_) = $2 in Ast.MODIFY [eff] }
+   | annoted EOF { Ast.QUIT }
+   | error
+     { raise (ExceptionDefn.Syntax_Error (add_pos 1 "Unrecognized command")) }
+diff --git a/core/main/dune b/core/main/dune
+index 39ce818..06cdbc4 100644
+--- a/core/main/dune
++++ b/core/main/dune
+@@ -1,5 +1,6 @@
+ (executable
+  (name KaSim)
++ (modes byte exe)
+  (libraries
+   lwt.unix
+   fmt
+diff --git a/core/simulation/state_interpreter.ml b/core/simulation/state_interpreter.ml
+index 027adbd..66a8e95 100644
+--- a/core/simulation/state_interpreter.ml
++++ b/core/simulation/state_interpreter.ml
+@@ -247,14 +247,14 @@ let rec perturbate ~debug_mode ~outputs ~is_alarm env counter graph state
+       let mix_changed = mix_changed && pert.Primitives.needs_backtrack in
+       let stop, graph, state, tail' =
+         List.fold_left
+-          (fun ((stop, graph, state, extra) as acc) effect ->
++          (fun ((stop, graph, state, extra) as acc) effect_ ->
+             if stop then
+               acc
+             else
+               do_modification ~debug_mode ~outputs env counter graph state extra
+-                effect)
++                effect_)
+           (false, graph, state, tail)
+-          pert.Primitives.effect
++          pert.Primitives.effect_
+       in
+       let () = state.perturbations_not_done_yet.(i) <- false in
+       let alive =
+@@ -278,12 +278,12 @@ let rec perturbate ~debug_mode ~outputs ~is_alarm env counter graph state
+ let do_modifications ~debug_mode ~outputs env counter graph state list =
+   let stop, graph, state, extra =
+     List.fold_left
+-      (fun ((stop, graph, state, extra) as acc) effect ->
++      (fun ((stop, graph, state, extra) as acc) effect_ ->
+         if stop then
+           acc
+         else
+           do_modification ~debug_mode ~outputs env counter graph state extra
+-            effect)
++            effect_)
+       (false, graph, state, []) list
+   in
+   if stop then
+diff --git a/core/term/kappa_printer.ml b/core/term/kappa_printer.ml
+index 0121f70..5889923 100644
+--- a/core/term/kappa_printer.ml
++++ b/core/term/kappa_printer.ml
+@@ -202,7 +202,7 @@ let perturbation ~noCounters ?env f pert =
+     (bool_expr ~noCounters ?env)
+     (fst pert.Primitives.precondition)
+     (Pp.list ~trailing:Pp.colon Pp.colon (modification ~noCounters ?env))
+-    pert.Primitives.effect
++    pert.Primitives.effect_
+     (bool_expr ~noCounters ?env)
+     (fst pert.Primitives.repeat)
+ 
+diff --git a/core/term/primitives.ml b/core/term/primitives.ml
+index 38c3e2c..5dac790 100644
+--- a/core/term/primitives.ml
++++ b/core/term/primitives.ml
+@@ -741,7 +741,7 @@ let modification_of_yojson ~filenames = function
+ type perturbation = {
+   alarm: Nbr.t option;
+   precondition: (Pattern.id array list, int) Alg_expr.bool Loc.annoted;
+-  effect: modification list;
++  effect_: modification list;
+   repeat: (Pattern.id array list, int) Alg_expr.bool Loc.annoted;
+   needs_backtrack: bool;
+ }
+@@ -764,7 +764,7 @@ let perturbation_to_yojson ~filenames p =
+         Loc.yojson_of_annoted ~filenames
+           (bool_expr_to_yojson ~filenames)
+           p.precondition );
+-      "effect", JsonUtil.of_list (modification_to_yojson ~filenames) p.effect;
++      "effect", JsonUtil.of_list (modification_to_yojson ~filenames) p.effect_;
+       ( "repeat",
+         Loc.yojson_of_annoted ~filenames
+           (bool_expr_to_yojson ~filenames)
+@@ -781,7 +781,7 @@ let perturbation_of_yojson ~filenames = function
+            Loc.annoted_of_yojson ~filenames
+              (bool_expr_of_yojson ~filenames)
+              (List.assoc "condition" l);
+-         effect =
++         effect_ =
+            JsonUtil.to_list
+              (modification_of_yojson ~filenames)
+              (List.assoc "effect" l);
+@@ -800,7 +800,7 @@ let perturbation_of_yojson ~filenames = function
+   | x -> raise (Yojson.Basic.Util.Type_error ("Invalid perturbation", x))
+ 
+ let exists_modification check l =
+-  Array.fold_left (fun acc p -> acc || List.exists check p.effect) false l
++  Array.fold_left (fun acc p -> acc || List.exists check p.effect_) false l
+ 
+ let extract_connected_components_expr acc e =
+   List.fold_left
+@@ -898,12 +898,12 @@ let map_expr_perturbation f_alg f_bool x =
+   {
+     alarm = x.alarm;
+     precondition = f_bool x.precondition;
+-    effect = List.map (map_expr_modification f_alg) x.effect;
++    effect_ = List.map (map_expr_modification f_alg) x.effect_;
+     repeat = f_bool x.repeat;
+     needs_backtrack = x.needs_backtrack;
+   }
+ 
+ let fold_expr_perturbation f_alg f_bool acc x =
+   let a1 = f_bool acc x.precondition in
+-  let a2 = List.fold_left (fold_expr_modification f_alg) a1 x.effect in
++  let a2 = List.fold_left (fold_expr_modification f_alg) a1 x.effect_ in
+   f_bool a2 x.repeat
+diff --git a/core/term/primitives.mli b/core/term/primitives.mli
+index f21d777..095f150 100644
+--- a/core/term/primitives.mli
++++ b/core/term/primitives.mli
+@@ -149,7 +149,7 @@ type modification =
+ type perturbation = {
+   alarm: Nbr.t option;
+   precondition: (Pattern.id array list, int) Alg_expr.bool Loc.annoted;
+-  effect: modification list;
++  effect_: modification list;
+   repeat: (Pattern.id array list, int) Alg_expr.bool Loc.annoted;
+   needs_backtrack: bool;
+ }

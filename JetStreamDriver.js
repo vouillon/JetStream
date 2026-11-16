@@ -3015,6 +3015,58 @@ let BENCHMARKS = [
         iterations: 40,
         tags: ["default", "Wasm"],
     }),
+    // OCaml (wasm_of_ocaml)
+    new AsyncBenchmark({
+        name: "ocaml-tools-wasm",
+        files: [
+            "./utils/polyfills/fast-text-encoding/1.0.3/text.js",
+            "./wasm/ocaml/benchmark.js",
+        ],
+        preload: {
+            manifest: "./wasm/ocaml/build/manifest.json",
+            jsoLoader: "./wasm/ocaml/build/js_of_ocaml.js",
+            jsoWasm: "./wasm/ocaml/build/js_of_ocaml.wasm",
+            jsoInput: "./wasm/ocaml/build/js_of_ocaml-input.cma",
+            ocamlformatLoader: "./wasm/ocaml/build/ocamlformat.js",
+            ocamlformatWasm: "./wasm/ocaml/build/ocamlformat.wasm",
+            ocamlformatInput: "./wasm/ocaml/build/ocamlformat-input.ml",
+        },
+        args: {
+            workloads: ["js_of_ocaml", "ocamlformat"],
+        },
+        iterations: 15,
+        worstCaseCount: 2,
+        tags: ["Wasm", "OCaml"],
+    }),
+    new AsyncBenchmark({
+        name: "ocaml-apps-wasm",
+        files: [
+            "./utils/polyfills/fast-text-encoding/1.0.3/text.js",
+            "./wasm/ocaml/benchmark.js",
+        ],
+        preload: {
+            manifest: "./wasm/ocaml/build/manifest.json",
+            camlboyLoader: "./wasm/ocaml/build/camlboy.js",
+            camlboyWasm: "./wasm/ocaml/build/camlboy.wasm",
+            camlboyRom: "./wasm/ocaml/build/camlboy-tobu.gb",
+            herdLoader: "./wasm/ocaml/build/herd.js",
+            herdWasm: "./wasm/ocaml/build/herd.wasm",
+            herdInputs: "./wasm/ocaml/build/herd-inputs.json",
+            msatLoader: "./wasm/ocaml/build/msat.js",
+            msatWasm: "./wasm/ocaml/build/msat.wasm",
+            msatInput0: "./wasm/ocaml/build/msat-0.cnf",
+            msatInput1: "./wasm/ocaml/build/msat-1.cnf",
+            kasimLoader: "./wasm/ocaml/build/kasim.js",
+            kasimWasm: "./wasm/ocaml/build/kasim.wasm",
+            kasimModel: "./wasm/ocaml/build/kasim-sos.ka",
+        },
+        args: {
+            workloads: ["camlboy", "herd", "msat", "kasim"],
+        },
+        iterations: 15,
+        worstCaseCount: 2,
+        tags: ["Wasm", "OCaml"],
+    }),
 ];
 
 

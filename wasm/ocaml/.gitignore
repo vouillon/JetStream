@@ -1,0 +1,11 @@
+# opam root, fetched sources and dune build directory (see build.sh).
+/_opam-root/
+/_opam-repository/
+/_jsoo/
+/_camlboy/
+/_herdtools7/
+/_zarith_stubs_js/
+/_kappatools/
+/_msat/
+/vendor/
+/_build/
