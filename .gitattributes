@@ -9,6 +9,7 @@ workloads/*-wasm/build/** linguist-generated=true
 workloads/Dart/build/** linguist-generated=true
 workloads/dotnet/build-aot/** linguist-generated=true
 workloads/dotnet/build-interp/** linguist-generated=true
+workloads/ocaml/build/** linguist-generated=true
 workloads/transformersjs/build/** linguist-generated=true
 
 # JavaScript workloads: webpack output of "npm run build". Their build/
