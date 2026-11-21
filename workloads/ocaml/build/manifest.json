@@ -13,6 +13,34 @@
     "output": "<stdout>",
     "expected": "19:22d5de53"
   },
+  "herd": {
+    "loader": "herdLoader",
+    "wasm": "herdWasm",
+    "files": {},
+    "bundle": "herdInputs",
+    "argv": [
+      "-set-libdir",
+      "lib",
+      "tests/2+2W+dmb.sys.litmus",
+      "tests/LB+dmb.sy+po.litmus",
+      "tests/LB+rel+BEQ3.litmus",
+      "tests/MP.litmus",
+      "tests/R.litmus",
+      "tests/S.litmus",
+      "tests/SB.litmus",
+      "tests/MP+CAS-rfi-ctrl+acq.litmus",
+      "tests/R+CAS-rfi-ctrl+DMBST.litmus",
+      "tests/MP+rel+CAS-ok-MRs-addr.litmus",
+      "tests/STABLE.litmus",
+      "tests/MP+rel+addr-po-loc-addr.litmus",
+      "tests/MP+rel+rmw-lrs-acq.litmus"
+    ],
+    "output": "<stdout>",
+    "ignore": [
+      "Time "
+    ],
+    "expected": "3235:6dc7c73e"
+  },
   "msat": {
     "loader": "msatLoader",
     "wasm": "msatWasm",
@@ -127,5 +155,26 @@
     ],
     "output": "<stdout>",
     "expected": "51611:d3235640"
+  },
+  "wax": {
+    "loader": "waxLoader",
+    "wasm": "waxWasm",
+    "files": {
+      "input.wax": "waxInput"
+    },
+    "argv": [
+      "input.wax",
+      "out.wasm"
+    ],
+    "output": "out.wasm",
+    "expected": "97637:a6362aa2"
+  },
+  "owl": {
+    "loader": "owlLoader",
+    "wasm": "owlWasm",
+    "files": {},
+    "argv": [],
+    "output": "<stdout>",
+    "expected": "39:0cf5e373"
   }
 }

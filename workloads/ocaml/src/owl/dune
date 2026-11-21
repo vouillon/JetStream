@@ -1,0 +1,4 @@
+(executable
+ (name owl_bench)
+ (modes byte exe)
+ (libraries owl-base))

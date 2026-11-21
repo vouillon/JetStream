@@ -1,0 +1,4 @@
+(executable
+ (name wax_bench)
+ (modes byte exe)
+ (libraries wax-lib wax-lib.wasm wax-lib.wax wax-lib.conversion wax-lib.utils))

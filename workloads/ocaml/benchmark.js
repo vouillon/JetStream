@@ -300,7 +300,9 @@ function filterLines(chunks, prefixes) {
         offset += chunk.length;
     }
     const text = new TextDecoder().decode(bytes);
-    const lines = text.split("\n").filter((line) => !prefixes.some((prefix) => line.startsWith(prefix)));
+    const lines = text
+        .split("\n")
+        .filter((line) => !prefixes.some((prefix) => line.startsWith(prefix)));
     return [new TextEncoder().encode(lines.join("\n"))];
 }
 
@@ -337,7 +339,8 @@ class OCamlProgram {
         if (this.description.bundle) {
             const bundle = JSON.parse(await JetStream.getString(preload[this.description.bundle]));
             const encoder = new TextEncoder();
-            for (const [path, text] of Object.entries(bundle)) this.inputs.push([path, encoder.encode(text)]);
+            for (const [path, text] of Object.entries(bundle))
+                this.inputs.push([path, encoder.encode(text)]);
         }
     }
 

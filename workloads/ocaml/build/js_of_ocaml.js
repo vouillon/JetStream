@@ -911,6 +911,6 @@
           event=>event.error && caml_handle_uncaught_exception(event.error));
        await _initialize();})
   (function(globalThis){"use strict"; return {};}(globalThis))
- ({"link": [["code-f358a84975c29eaada96", 0]],
+ ({"link": [["code-43bfdca9de7d3b5e1ba8", 0]],
    "generated": {},
    "src": "js_of_ocaml.assets"});
