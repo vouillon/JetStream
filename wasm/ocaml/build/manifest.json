@@ -13,34 +13,6 @@
     "output": "<stdout>",
     "expected": "19:22d5de53"
   },
-  "herd": {
-    "loader": "herdLoader",
-    "wasm": "herdWasm",
-    "files": {},
-    "bundle": "herdInputs",
-    "argv": [
-      "-set-libdir",
-      "lib",
-      "tests/2+2W+dmb.sys.litmus",
-      "tests/LB+dmb.sy+po.litmus",
-      "tests/LB+rel+BEQ3.litmus",
-      "tests/MP.litmus",
-      "tests/R.litmus",
-      "tests/S.litmus",
-      "tests/SB.litmus",
-      "tests/MP+CAS-rfi-ctrl+acq.litmus",
-      "tests/R+CAS-rfi-ctrl+DMBST.litmus",
-      "tests/MP+rel+CAS-ok-MRs-addr.litmus",
-      "tests/STABLE.litmus",
-      "tests/MP+rel+addr-po-loc-addr.litmus",
-      "tests/MP+rel+rmw-lrs-acq.litmus"
-    ],
-    "output": "<stdout>",
-    "ignore": [
-      "Time "
-    ],
-    "expected": "3235:6dc7c73e"
-  },
   "msat": {
     "loader": "msatLoader",
     "wasm": "msatWasm",
@@ -86,6 +58,35 @@
     ],
     "expected": "1838:d42aefaf"
   },
+  "incremental": {
+    "loader": "incrementalLoader",
+    "wasm": "incrementalWasm",
+    "files": {},
+    "argv": [
+      "--rows",
+      "128",
+      "--cols",
+      "16",
+      "--steps",
+      "25000"
+    ],
+    "output": "<stdout>",
+    "expected": "21:ca4bb9e4"
+  },
+  "digestif": {
+    "loader": "digestifLoader",
+    "wasm": "digestifWasm",
+    "files": {
+      "tobu.gb": "camlboyRom"
+    },
+    "argv": [
+      "--rounds",
+      "5",
+      "tobu.gb"
+    ],
+    "output": "<stdout>",
+    "expected": "350:df962a0b"
+  },
   "ocamlformat": {
     "loader": "ocamlformatLoader",
     "wasm": "ocamlformatWasm",
@@ -112,5 +113,19 @@
     ],
     "output": "out.js",
     "expected": "94585:733797d3"
+  },
+  "cmarkit": {
+    "loader": "cmarkitLoader",
+    "wasm": "cmarkitWasm",
+    "files": {
+      "spec.md": "cmarkitInput"
+    },
+    "argv": [
+      "--repeats",
+      "40",
+      "spec.md"
+    ],
+    "output": "<stdout>",
+    "expected": "51611:d3235640"
   }
 }

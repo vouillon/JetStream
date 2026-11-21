@@ -1,0 +1,4 @@
+(executable
+ (name incremental_bench)
+ (modes byte exe)
+ (libraries incremental))

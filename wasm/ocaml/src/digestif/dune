@@ -1,0 +1,4 @@
+(executable
+ (name digestif_bench)
+ (modes byte exe)
+ (libraries digestif.ocaml))
