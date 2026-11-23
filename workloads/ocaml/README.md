@@ -68,7 +68,9 @@ repository), fetches the third-party sources at fixed versions (applying the
 patches in `patches/`, see below), builds the programs and compiles them with
 `wasm_of_ocaml --effects=disabled --opt 2 --pretty`. `--pretty` keeps a name
 section in the Wasm modules, for profiling; the code is otherwise almost
-identical to that produced without it.
+identical to that produced without it. The modules are then passed through
+`wasm-opt --translate-to-exnref -g` to translate legacy exception handling
+while retaining names.
 `build.log` records the versions used. The programs' command lines and
 expected output checksums are written to `build/manifest.json`.
 

@@ -108,6 +108,18 @@ log "Binaryen: $(wasm-opt --version)"
 log "Installed opam packages:"
 opam list --installed --columns=name,version --normalise | tee -a "$BUILD_LOG"
 
+WASM_OPT_FLAGS=(
+  --enable-gc
+  --enable-multivalue
+  --enable-exception-handling
+  --enable-reference-types
+  --enable-tail-call
+  --enable-bulk-memory
+  --enable-nontrapping-float-to-int
+  --enable-strings
+  --enable-multimemory
+)
+
 # Third-party sources.
 fetch_commit "$CAMLBOY_REPO" "$CAMLBOY_COMMIT" _camlboy
 mkdir -p vendor/camlboy
@@ -162,7 +174,10 @@ compile() {
     echo "Expected a single Wasm module for $name" >&2
     exit 1
   fi
-  mv "${modules[0]}" "build/$name.wasm"
+  local wasm_file="build/$name.wasm"
+  mv "${modules[0]}" "$wasm_file"
+  wasm-opt --translate-to-exnref -g "${WASM_OPT_FLAGS[@]}" "$wasm_file" -o "$wasm_file" \
+    2>&1 | tee -a "$BUILD_LOG"
   rm -r "build/$name.assets"
 }
 
